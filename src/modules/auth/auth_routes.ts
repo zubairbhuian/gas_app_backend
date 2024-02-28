@@ -1,12 +1,17 @@
 import express, { Router } from "express";
-import { forgetPassController, loginController, sendOTPController, signUpController } from "./auth_controller";
+import { changePassController, forgetPassController, getUserController, loginController, sendOTPController, signUpController, updateUserController } from "./auth_controller";
 
-const authRoutes =express.Router();
+const authRoutes = express.Router();
+// main auth
+authRoutes.post('/login', loginController);
+authRoutes.post('/sign_up', signUpController);
+authRoutes.post('/send_otp', sendOTPController);
+// user
+authRoutes.get('/get_user', getUserController);
+authRoutes.put('/update_user', updateUserController);
+authRoutes.post('/forget_password', forgetPassController);
+authRoutes.patch('/change_password', changePassController);
 
-authRoutes.post('/login',loginController);
-authRoutes.post('/signUp',signUpController);
-authRoutes.post('/forgetPassword',forgetPassController);
-authRoutes.post('/sendOTP',sendOTPController);
 
 
 export default authRoutes;

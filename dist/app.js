@@ -10,6 +10,12 @@ const todos_routes_1 = __importDefault(require("./modules/todos/todos_routes"));
 const seeds_routes_1 = __importDefault(require("./modules/seeds/seeds_routes"));
 const morgan_1 = __importDefault(require("morgan"));
 const express_rate_limit_1 = __importDefault(require("express-rate-limit"));
+const faq_routes_1 = __importDefault(require("./modules/faq/faq_routes"));
+const terms_and_conditions_routes_1 = __importDefault(require("./modules/termsAndConditions/terms_and_conditions_routes"));
+const privacy_policy_routes_1 = __importDefault(require("./modules/privacyPolicy/privacy_policy_routes"));
+const notification_routes_1 = __importDefault(require("./modules/notification/notification_routes"));
+const gas_cylinder_safety_routes_1 = __importDefault(require("./modules/gasCylinderSafety/gas_cylinder_safety_routes"));
+const gas_banner_routes_1 = __importDefault(require("./modules/gas_banner/gas_banner_routes"));
 const app = (0, express_1.default)();
 // Parse JSON bodies
 app.use(body_parser_1.default.json());
@@ -27,6 +33,12 @@ app.use(body_parser_1.default.urlencoded({ extended: true }));
 app.use('/', seeds_routes_1.default);
 app.use('/api/v1/todos', todos_routes_1.default);
 app.use('/api/v1/auth', auth_routes_1.default);
+app.use('/api/v1/faqs', faq_routes_1.default);
+app.use('/api/v1/terms_and_conditions', terms_and_conditions_routes_1.default);
+app.use('/api/v1/privacy_policy', privacy_policy_routes_1.default);
+app.use('/api/v1/notification', notification_routes_1.default);
+app.use('/api/v1/gas_cylinder_safety', gas_cylinder_safety_routes_1.default);
+app.use('/api/v1/gas_banner', gas_banner_routes_1.default);
 // client Error handeling
 app.use((req, res, next) => {
     const error = new Error('Not Found');

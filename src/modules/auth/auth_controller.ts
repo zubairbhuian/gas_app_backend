@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import { authModel } from "./auth_model";
 import { jwtSecretKey, tokenExpiresIn } from "../../utils/secret"
 import { json } from "body-parser";
+import { successResposnse } from "../../helper/resposnse";
 
 export const loginController = async (req: Request, res: Response, next: NextFunction) => {
     const { email, password } = req.body;
@@ -22,12 +23,13 @@ export const loginController = async (req: Request, res: Response, next: NextFun
         }
         // Create a JWT token
         const token = jwt.sign({ userId: user._id }, jwtSecretKey, { expiresIn: tokenExpiresIn });
-        const userWithoutPassword = { _id: user._id, email: user.email };
+        const userWithoutPassword = { _id: user._id, email: user.email, phone: user.phone, addreass: user.addreass, photoURL: user.photoURL };
         res.status(200).json({
             message: 'Login successful',
             data: userWithoutPassword,
             token
         });
+
     } catch (error) {
         return res.status(500).json({
             message: 'server error'
@@ -36,7 +38,7 @@ export const loginController = async (req: Request, res: Response, next: NextFun
 }
 // signUp
 export const signUpController = async (req: Request, res: Response, next: NextFunction) => {
-    const { email, password } = req.body;
+    const { email, password,phone } = req.body;
     if (!email || !password) {
         return res.status(400).json({ message: 'Please provide email, and password' });
     }
@@ -47,11 +49,11 @@ export const signUpController = async (req: Request, res: Response, next: NextFu
             return res.status(400).json({ message: 'Email already exists' });
         }
         // Create a new user
-        const newUser = new authModel({ email, password });
-        await newUser.save();
+        const user = new authModel({ email, password ,phone});
+        await user.save();
         // Create a JWT token
-        const token = jwt.sign({ userId: newUser._id }, jwtSecretKey, { expiresIn: tokenExpiresIn });
-        const userWithoutPassword = { _id: newUser._id, email: newUser.email };
+        const token = jwt.sign({ userId: user._id }, jwtSecretKey, { expiresIn: tokenExpiresIn });
+        const userWithoutPassword = { _id: user._id, email: user.email, phone: user.phone, addreass: user.addreass, photoURL: user.photoURL };
         res.status(200).json({
             message: 'Signup successful',
             data: userWithoutPassword,
@@ -70,8 +72,20 @@ export const signUpController = async (req: Request, res: Response, next: NextFu
 export const forgetPassController = (req: Request, res: Response, next: NextFunction) => {
     res.send('forget');
 }
+// change password
+export const changePassController = (req: Request, res: Response, next: NextFunction) => {
+    res.send('change');
+}
 // otp
 export const sendOTPController = (req: Request, res: Response, next: NextFunction) => {
+    res.send('otp');
+}
+// get user
+export const getUserController = (req: Request, res: Response, next: NextFunction) => {
+    res.send('user');
+}
+// Update user
+export const updateUserController = (req: Request, res: Response, next: NextFunction) => {
     res.send('otp');
 }
 

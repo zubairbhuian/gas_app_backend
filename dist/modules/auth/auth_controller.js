@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.sendOTPController = exports.forgetPassController = exports.signUpController = exports.loginController = void 0;
+exports.updateUserController = exports.getUserController = exports.sendOTPController = exports.changePassController = exports.forgetPassController = exports.signUpController = exports.loginController = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const auth_model_1 = require("./auth_model");
 const secret_1 = require("../../utils/secret");
@@ -34,7 +34,7 @@ const loginController = (req, res, next) => __awaiter(void 0, void 0, void 0, fu
         }
         // Create a JWT token
         const token = jsonwebtoken_1.default.sign({ userId: user._id }, secret_1.jwtSecretKey, { expiresIn: secret_1.tokenExpiresIn });
-        const userWithoutPassword = { _id: user._id, email: user.email };
+        const userWithoutPassword = { _id: user._id, email: user.email, phone: user.phone, addreass: user.addreass, photoURL: user.photoURL };
         res.status(200).json({
             message: 'Login successful',
             data: userWithoutPassword,
@@ -50,7 +50,7 @@ const loginController = (req, res, next) => __awaiter(void 0, void 0, void 0, fu
 exports.loginController = loginController;
 // signUp
 const signUpController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const { email, password } = req.body;
+    const { email, password, phone } = req.body;
     if (!email || !password) {
         return res.status(400).json({ message: 'Please provide email, and password' });
     }
@@ -61,11 +61,11 @@ const signUpController = (req, res, next) => __awaiter(void 0, void 0, void 0, f
             return res.status(400).json({ message: 'Email already exists' });
         }
         // Create a new user
-        const newUser = new auth_model_1.authModel({ email, password });
-        yield newUser.save();
+        const user = new auth_model_1.authModel({ email, password, phone });
+        yield user.save();
         // Create a JWT token
-        const token = jsonwebtoken_1.default.sign({ userId: newUser._id }, secret_1.jwtSecretKey, { expiresIn: secret_1.tokenExpiresIn });
-        const userWithoutPassword = { _id: newUser._id, email: newUser.email };
+        const token = jsonwebtoken_1.default.sign({ userId: user._id }, secret_1.jwtSecretKey, { expiresIn: secret_1.tokenExpiresIn });
+        const userWithoutPassword = { _id: user._id, email: user.email, phone: user.phone, addreass: user.addreass, photoURL: user.photoURL };
         res.status(200).json({
             message: 'Signup successful',
             data: userWithoutPassword,
@@ -85,9 +85,24 @@ const forgetPassController = (req, res, next) => {
     res.send('forget');
 };
 exports.forgetPassController = forgetPassController;
+// change password
+const changePassController = (req, res, next) => {
+    res.send('change');
+};
+exports.changePassController = changePassController;
 // otp
 const sendOTPController = (req, res, next) => {
     res.send('otp');
 };
 exports.sendOTPController = sendOTPController;
+// get user
+const getUserController = (req, res, next) => {
+    res.send('user');
+};
+exports.getUserController = getUserController;
+// Update user
+const updateUserController = (req, res, next) => {
+    res.send('otp');
+};
+exports.updateUserController = updateUserController;
 //# sourceMappingURL=auth_controller.js.map

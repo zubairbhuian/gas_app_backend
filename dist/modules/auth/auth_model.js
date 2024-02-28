@@ -46,11 +46,25 @@ const authSchema = new mongoose_1.Schema({
         unique: true,
         lowercase: true,
     },
+    phone: {
+        type: String,
+        trim: true,
+        default: ''
+    },
     password: {
         type: String,
         required: [true, 'User password is missing'],
         minlength: [6, 'User password should be at least 6 characters'],
         set: (value) => bcrypt_1.default.hashSync(value, bcrypt_1.default.genSaltSync(10)),
+    },
+    addreass: {
+        type: String,
+        trim: true,
+        default: ''
+    },
+    photoURL: {
+        type: String,
+        default: ''
     },
 }, { timestamps: true });
 // Add comparePassword method

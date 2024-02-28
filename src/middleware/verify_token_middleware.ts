@@ -15,12 +15,10 @@ function verifyToken(req: AuthenticatedRequest, res: Response, next: NextFunctio
     }
     jwt.verify(token, jwtSecretKey, (err, decoded) => {
       if (err) {
-        
         return res.status(401).json({ message: 'Invalid token' });
       }
       req.userId = (decoded as JwtPayload).userId as string;
       next();
-
     });
 }
 
