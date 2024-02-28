@@ -39,6 +39,12 @@ exports.authModel = void 0;
 const mongoose_1 = __importStar(require("mongoose"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const authSchema = new mongoose_1.Schema({
+    name: {
+        type: String,
+        trim: true,
+        required: [true, 'User Name is missing'],
+        default: ''
+    },
     email: {
         type: String,
         required: [true, 'User email is missing'],
@@ -51,16 +57,16 @@ const authSchema = new mongoose_1.Schema({
         trim: true,
         default: ''
     },
+    addreass: {
+        type: String,
+        trim: true,
+        default: ''
+    },
     password: {
         type: String,
         required: [true, 'User password is missing'],
         minlength: [6, 'User password should be at least 6 characters'],
         set: (value) => bcrypt_1.default.hashSync(value, bcrypt_1.default.genSaltSync(10)),
-    },
-    addreass: {
-        type: String,
-        trim: true,
-        default: ''
     },
     photoURL: {
         type: String,

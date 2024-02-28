@@ -5,10 +5,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const privacy_policy_controller_1 = require("./privacy_policy_controller");
+const verify_token_middleware_1 = __importDefault(require("../../middleware/verify_token_middleware"));
 const privacyPolicyRoutes = express_1.default.Router();
-privacyPolicyRoutes.get('/', privacy_policy_controller_1.getPrivacyPolicyController);
-privacyPolicyRoutes.post('/', privacy_policy_controller_1.createPrivacyPolicyController);
-privacyPolicyRoutes.put('/', privacy_policy_controller_1.updatePrivacyPolicyController);
-privacyPolicyRoutes.delete('/', privacy_policy_controller_1.deletePrivacyPolicyController);
+privacyPolicyRoutes.get('/', verify_token_middleware_1.default, privacy_policy_controller_1.getPrivacyPolicyController);
+privacyPolicyRoutes.post('/', verify_token_middleware_1.default, privacy_policy_controller_1.createPrivacyPolicyController);
+privacyPolicyRoutes.put('/', verify_token_middleware_1.default, privacy_policy_controller_1.updatePrivacyPolicyController);
+privacyPolicyRoutes.delete('/', verify_token_middleware_1.default, privacy_policy_controller_1.deletePrivacyPolicyController);
 exports.default = privacyPolicyRoutes;
 //# sourceMappingURL=privacy_policy_routes.js.map

@@ -8,7 +8,7 @@ import { successResposnse } from "../../helper/resposnse";
 export const loginController = async (req: Request, res: Response, next: NextFunction) => {
     const { email, password } = req.body;
     if (!email || !password) {
-        return res.status(400).json({ message: 'Please provide email, and password' });
+        return res.status(400).json({ message: 'name, email, and password is required' });
     }
     try {
         // Check if the user exists
@@ -23,7 +23,7 @@ export const loginController = async (req: Request, res: Response, next: NextFun
         }
         // Create a JWT token
         const token = jwt.sign({ userId: user._id }, jwtSecretKey, { expiresIn: tokenExpiresIn });
-        const userWithoutPassword = { _id: user._id, email: user.email, phone: user.phone, addreass: user.addreass, photoURL: user.photoURL };
+        const userWithoutPassword = { _id: user._id, name: user.name, email: user.email, phone: user.phone, addreass: user.addreass, photoURL: user.photoURL };
         res.status(200).json({
             message: 'Login successful',
             data: userWithoutPassword,
@@ -38,8 +38,8 @@ export const loginController = async (req: Request, res: Response, next: NextFun
 }
 // signUp
 export const signUpController = async (req: Request, res: Response, next: NextFunction) => {
-    const { email, password,phone } = req.body;
-    if (!email || !password) {
+    const { name, email, password, phone } = req.body;
+    if (!name || !email || !password) {
         return res.status(400).json({ message: 'Please provide email, and password' });
     }
     try {
@@ -49,11 +49,11 @@ export const signUpController = async (req: Request, res: Response, next: NextFu
             return res.status(400).json({ message: 'Email already exists' });
         }
         // Create a new user
-        const user = new authModel({ email, password ,phone});
+        const user = new authModel({ name, email, password, phone });
         await user.save();
         // Create a JWT token
         const token = jwt.sign({ userId: user._id }, jwtSecretKey, { expiresIn: tokenExpiresIn });
-        const userWithoutPassword = { _id: user._id, email: user.email, phone: user.phone, addreass: user.addreass, photoURL: user.photoURL };
+        const userWithoutPassword = { _id: user._id, name: user.name, email: user.email, phone: user.phone, addreass: user.addreass, photoURL: user.photoURL };
         res.status(200).json({
             message: 'Signup successful',
             data: userWithoutPassword,

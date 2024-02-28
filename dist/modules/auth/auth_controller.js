@@ -19,7 +19,7 @@ const secret_1 = require("../../utils/secret");
 const loginController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, password } = req.body;
     if (!email || !password) {
-        return res.status(400).json({ message: 'Please provide email, and password' });
+        return res.status(400).json({ message: 'name, email, and password is required' });
     }
     try {
         // Check if the user exists
@@ -34,7 +34,7 @@ const loginController = (req, res, next) => __awaiter(void 0, void 0, void 0, fu
         }
         // Create a JWT token
         const token = jsonwebtoken_1.default.sign({ userId: user._id }, secret_1.jwtSecretKey, { expiresIn: secret_1.tokenExpiresIn });
-        const userWithoutPassword = { _id: user._id, email: user.email, phone: user.phone, addreass: user.addreass, photoURL: user.photoURL };
+        const userWithoutPassword = { _id: user._id, name: user.name, email: user.email, phone: user.phone, addreass: user.addreass, photoURL: user.photoURL };
         res.status(200).json({
             message: 'Login successful',
             data: userWithoutPassword,
@@ -50,8 +50,8 @@ const loginController = (req, res, next) => __awaiter(void 0, void 0, void 0, fu
 exports.loginController = loginController;
 // signUp
 const signUpController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const { email, password, phone } = req.body;
-    if (!email || !password) {
+    const { name, email, password, phone } = req.body;
+    if (!name || !email || !password) {
         return res.status(400).json({ message: 'Please provide email, and password' });
     }
     try {
@@ -61,11 +61,11 @@ const signUpController = (req, res, next) => __awaiter(void 0, void 0, void 0, f
             return res.status(400).json({ message: 'Email already exists' });
         }
         // Create a new user
-        const user = new auth_model_1.authModel({ email, password, phone });
+        const user = new auth_model_1.authModel({ name, email, password, phone });
         yield user.save();
         // Create a JWT token
         const token = jsonwebtoken_1.default.sign({ userId: user._id }, secret_1.jwtSecretKey, { expiresIn: secret_1.tokenExpiresIn });
-        const userWithoutPassword = { _id: user._id, email: user.email, phone: user.phone, addreass: user.addreass, photoURL: user.photoURL };
+        const userWithoutPassword = { _id: user._id, name: user.name, email: user.email, phone: user.phone, addreass: user.addreass, photoURL: user.photoURL };
         res.status(200).json({
             message: 'Signup successful',
             data: userWithoutPassword,

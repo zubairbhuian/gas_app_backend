@@ -1,13 +1,13 @@
 import express from "express";
 import { createFAQSController, deleteFAQSController,  getFAQSController, updateFAQSController } from "./faq_controller";
-
+import verifyToken from "../../middleware/verify_token_middleware";
 
 const faqRoutes = express.Router();
 
-faqRoutes.get('/', getFAQSController);
-faqRoutes.post('/', createFAQSController);
-faqRoutes.put('/', updateFAQSController);
-faqRoutes.delete('/', deleteFAQSController);
+faqRoutes.get('/',verifyToken, getFAQSController);
+faqRoutes.post('/',verifyToken, createFAQSController);
+faqRoutes.put('/',verifyToken, updateFAQSController);
+faqRoutes.delete('/',verifyToken, deleteFAQSController);
 
 
 export default faqRoutes;

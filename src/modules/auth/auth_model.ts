@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 
 interface IAuthModel extends Document {
     email: string;
+    name: string;
     phone: string;
     password: string;
     addreass: string;
@@ -12,6 +13,12 @@ interface IAuthModel extends Document {
 }
 
 const authSchema = new Schema<IAuthModel>({
+    name: {
+        type: String,
+        trim: true,
+        required: [true, 'User Name is missing'],
+        default: ''
+    },
     email: {
         type: String,
         required: [true, 'User email is missing'],
@@ -24,16 +31,16 @@ const authSchema = new Schema<IAuthModel>({
         trim: true,
         default: ''
     },
+    addreass: {
+        type: String,
+        trim: true,
+        default: ''
+    },
     password: {
         type: String,
         required: [true, 'User password is missing'],
         minlength: [6, 'User password should be at least 6 characters'],
         set: (value: string) => bcrypt.hashSync(value, bcrypt.genSaltSync(10)),
-    },
-    addreass: {
-        type: String,
-        trim: true,
-        default: ''
     },
     photoURL: {
         type: String,
