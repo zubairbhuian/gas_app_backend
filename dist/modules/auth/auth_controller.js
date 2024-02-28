@@ -66,7 +66,7 @@ const signUpController = (req, res, next) => __awaiter(void 0, void 0, void 0, f
         // Create a JWT token
         const token = jsonwebtoken_1.default.sign({ userId: user._id }, secret_1.jwtSecretKey, { expiresIn: secret_1.tokenExpiresIn });
         const userWithoutPassword = { _id: user._id, name: user.name, email: user.email, phone: user.phone, addreass: user.addreass, photoURL: user.photoURL };
-        res.status(200).json({
+        res.status(201).json({
             message: 'Signup successful',
             data: userWithoutPassword,
             token

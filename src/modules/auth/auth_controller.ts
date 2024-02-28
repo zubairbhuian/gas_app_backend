@@ -54,7 +54,7 @@ export const signUpController = async (req: Request, res: Response, next: NextFu
         // Create a JWT token
         const token = jwt.sign({ userId: user._id }, jwtSecretKey, { expiresIn: tokenExpiresIn });
         const userWithoutPassword = { _id: user._id, name: user.name, email: user.email, phone: user.phone, addreass: user.addreass, photoURL: user.photoURL };
-        res.status(200).json({
+        res.status(201).json({
             message: 'Signup successful',
             data: userWithoutPassword,
             token
