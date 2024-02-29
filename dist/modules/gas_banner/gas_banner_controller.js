@@ -12,9 +12,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteGasBannerController = exports.updateGasBannerController = exports.createGasBannerController = exports.getGasBannerController = void 0;
+exports.deleteAllGasBannerController = exports.deleteGasBannerController = exports.updateGasBannerController = exports.createGasBannerController = exports.getGasBannerController = void 0;
 const gas_banner_model_1 = require("./gas_banner_model");
 const mongoose_1 = __importDefault(require("mongoose"));
+const fs_extra_1 = __importDefault(require("fs-extra"));
 // ! get GasBanner
 const getGasBannerController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -33,18 +34,20 @@ exports.getGasBannerController = getGasBannerController;
 // ! create GasBanner
 const createGasBannerController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        // Extract data from the request body
-        const { imgURL } = req.body;
-        if (!imgURL) {
-            return res.status(400).json({ error: 'Image is required' });
-        }
-        // Create a new document using the Mongoose model
+        // Get the filename of the uploaded image
+        const filename = req.file.filename;
+        const filePath = "/uploads/banner/" + filename;
         const newData = new gas_banner_model_1.GasBannerMolel({
-            imgURL
+            imgURL: filePath
         });
         // Save the document to the database
         yield newData.save();
-        res.status(201).json({ message: 'Data saved successfully!', data: newData });
+        res.status(201).json({
+            message: 'Data saved successfully!', data: {
+                'img': newData.imgURL,
+                'id': newData.id
+            }
+        });
     }
     catch (e) {
         next(e);
@@ -54,7 +57,9 @@ exports.createGasBannerController = createGasBannerController;
 // ! update GasBanner
 const updateGasBannerController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { id, imgURL } = req.body;
+        const filename = req.file.filename;
+        const filePath = "/uploads/banner/" + filename;
+        const { id } = req.body;
         if (!id) {
             return res.status(400).json({ error: 'Id is required fields' });
         }
@@ -62,12 +67,23 @@ const updateGasBannerController = (req, res, next) => __awaiter(void 0, void 0, 
         if (!mongoose_1.default.Types.ObjectId.isValid(id)) {
             return res.status(400).json({ error: 'Invalid ID' });
         }
-        // Check if any data to update is provided
-        if (!imgURL) {
-            return res.status(400).json({ error: 'No data provided for update' });
+        /// old file path
+        var oldBanner = yield gas_banner_model_1.GasBannerMolel.findById(id);
+        if (!oldBanner) {
+            return res.status(404).json({ error: 'Data not found' });
         }
-        // Find the document by ID and update it
-        const updatedData = yield gas_banner_model_1.GasBannerMolel.findByIdAndUpdate(id, { imgURL }, { new: true });
+        const oldFilePath = "public/" + oldBanner.imgURL;
+        // Use fs-extra's unlink method to delete the file
+        fs_extra_1.default.unlink(oldFilePath, (err) => {
+            if (err) {
+                console.error(`Error deleting file ${filePath}:`, err);
+            }
+            else {
+                console.log(`File ${filePath} deleted successfully.`);
+            }
+        });
+        /// Find the document by ID and update it
+        const updatedData = yield gas_banner_model_1.GasBannerMolel.findByIdAndUpdate(id, { imgURL: filePath }, { new: true });
         // Check if the document exists
         if (!updatedData) {
             return res.status(404).json({ error: 'Data not found' });
@@ -86,6 +102,7 @@ const deleteGasBannerController = (req, res, next) => __awaiter(void 0, void 0, 
     try {
         // Extract the ID from the request parameters
         const { id } = req.body;
+        console.log(id);
         if (!id) {
             return res.status(400).json({ error: 'Id is required fields' });
         }
@@ -93,6 +110,17 @@ const deleteGasBannerController = (req, res, next) => __awaiter(void 0, void 0, 
         if (!mongoose_1.default.Types.ObjectId.isValid(id)) {
             return res.status(400).json({ error: 'Invalid ID' });
         }
+        var banner = yield gas_banner_model_1.GasBannerMolel.findById(id);
+        const filePath = "public/" + banner.imgURL;
+        // Use fs-extra's unlink method to delete the file
+        fs_extra_1.default.unlink(filePath, (err) => {
+            if (err) {
+                console.error(`Error deleting file ${filePath}:`, err);
+            }
+            else {
+                console.log(`File ${filePath} deleted successfully.`);
+            }
+        });
         // Find the document by ID and delete it
         const deletedData = yield gas_banner_model_1.GasBannerMolel.findByIdAndDelete(id);
         // Check if the document exists
@@ -106,6 +134,39 @@ const deleteGasBannerController = (req, res, next) => __awaiter(void 0, void 0, 
         console.log(error);
         res.status(500).json({ error: 'Internal server error' });
     }
-});
+}); //deleteAllGasBannerController
 exports.deleteGasBannerController = deleteGasBannerController;
+// ! delete all GasBanner
+const deleteAllGasBannerController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        // Respond with a success message
+        var deletedData = yield gas_banner_model_1.GasBannerMolel.deleteMany();
+        const folderPath = 'public/uploads/banner';
+        fs_extra_1.default.readdir(folderPath, (err, files) => {
+            if (err) {
+                console.error(`Error reading directory ${folderPath}:`, err);
+                return;
+            }
+            // Iterate over the files and remove each one
+            files.forEach((file) => {
+                const filePath = `${folderPath}/${file}`;
+                // Use fs-extra's unlink method to delete the file
+                fs_extra_1.default.unlink(filePath, (unlinkErr) => {
+                    if (unlinkErr) {
+                        console.error(`Error deleting file ${filePath}:`, unlinkErr);
+                    }
+                    else {
+                        console.log(`File ${filePath} deleted successfully.`);
+                    }
+                });
+            });
+        });
+        res.status(200).json({ message: 'Data deleted successfully', deletedData });
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+exports.deleteAllGasBannerController = deleteAllGasBannerController;
 //# sourceMappingURL=gas_banner_controller.js.map

@@ -12,9 +12,13 @@ import privacyPolicyRoutes from "./modules/privacyPolicy/privacy_policy_routes";
 import notificationRoutes from "./modules/notification/notification_routes";
 import gasCylinderSafetyRoutes from "./modules/gasCylinderSafety/gas_cylinder_safety_routes";
 import gasBannerRoutes from "./modules/gas_banner/gas_banner_routes";
-
+import path from 'path';
 
 const app = express();
+// Serve static files from the 'public' directory
+const publicPath = path.join(__dirname, '../public');
+app.use(express.static(publicPath));
+
 // Parse JSON bodies
 app.use(bodyParser.json());
 
@@ -44,6 +48,10 @@ app.use('/api/v1/gas_banner', gasBannerRoutes);
 
 
 
+
+// // Define a static route to serve uploaded images
+// // app.use('/images', express.static(__dirname + '/public/uploads'));
+// app.use( express.static('public'));
 // client Error handeling
 app.use((req: Request, res: Response, next: NextFunction) => {
     const error = new Error('Not Found');

@@ -28,7 +28,7 @@ const mongoose_1 = __importStar(require("mongoose"));
 const gasBannerSchema = new mongoose_1.Schema({
     imgURL: {
         type: String,
-        default: ''
+        required: [true, 'User imgURL is missing'],
     },
 }, { timestamps: true } // when this data create or update
 );
