@@ -5,6 +5,7 @@ import { jwtSecretKey, tokenExpiresIn } from "../../utils/secret"
 import { json } from "body-parser";
 import { successResposnse } from "../../helper/resposnse";
 
+
 export const loginController = async (req: Request, res: Response, next: NextFunction) => {
     const { email, password } = req.body;
     if (!email || !password) {
@@ -81,8 +82,22 @@ export const sendOTPController = (req: Request, res: Response, next: NextFunctio
     res.send('otp');
 }
 // get user
-export const getUserController = (req: Request, res: Response, next: NextFunction) => {
-    res.send('user');
+export const getUserController = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const token = req.headers['authorization'];
+        // Decode the token
+        const decodedToken: any = jwt.decode(token);
+        if (decodedToken) {
+            // Extract the userId from the decoded token
+            const userId = await decodedToken.userId;
+            var user = await authModel.findById(userId).select('-password');
+            return successResposnse(res, { data: user })
+        } else {
+            console.error('Failed to decode token.');
+        }
+    } catch (error) {
+        next(error);
+    }
 }
 // Update user
 export const updateUserController = (req: Request, res: Response, next: NextFunction) => {

@@ -9,11 +9,11 @@ const errorResposnse = (res, { statusCode = 500, message = "Internal Server Erro
     });
 };
 exports.errorResposnse = errorResposnse;
-const successResposnse = (res, { statusCode = 200, message = "Success", payload = {} }) => {
+const successResposnse = (res, { statusCode = 200, message = "Success", data = {} }) => {
     return res.status(statusCode).json({
         success: true,
         message,
-        payload
+        data
     });
 };
 exports.successResposnse = successResposnse;

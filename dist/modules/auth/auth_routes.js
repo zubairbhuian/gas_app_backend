@@ -5,15 +5,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const auth_controller_1 = require("./auth_controller");
+const verify_token_middleware_1 = __importDefault(require("../../middleware/verify_token_middleware"));
 const authRoutes = express_1.default.Router();
 // main auth
 authRoutes.post('/login', auth_controller_1.loginController);
 authRoutes.post('/sign_up', auth_controller_1.signUpController);
 authRoutes.post('/send_otp', auth_controller_1.sendOTPController);
 // user
-authRoutes.get('/get_user', auth_controller_1.getUserController);
-authRoutes.put('/update_user', auth_controller_1.updateUserController);
+authRoutes.get('/get_user', verify_token_middleware_1.default, auth_controller_1.getUserController);
+authRoutes.put('/update_user', verify_token_middleware_1.default, auth_controller_1.updateUserController);
 authRoutes.post('/forget_password', auth_controller_1.forgetPassController);
-authRoutes.patch('/change_password', auth_controller_1.changePassController);
+authRoutes.patch('/change_password', verify_token_middleware_1.default, auth_controller_1.changePassController);
 exports.default = authRoutes;
 //# sourceMappingURL=auth_routes.js.map

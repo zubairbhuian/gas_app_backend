@@ -16,6 +16,7 @@ exports.updateUserController = exports.getUserController = exports.sendOTPContro
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const auth_model_1 = require("./auth_model");
 const secret_1 = require("../../utils/secret");
+const resposnse_1 = require("../../helper/resposnse");
 const loginController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, password } = req.body;
     if (!email || !password) {
@@ -96,9 +97,25 @@ const sendOTPController = (req, res, next) => {
 };
 exports.sendOTPController = sendOTPController;
 // get user
-const getUserController = (req, res, next) => {
-    res.send('user');
-};
+const getUserController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const token = req.headers['authorization'];
+        // Decode the token
+        const decodedToken = jsonwebtoken_1.default.decode(token);
+        if (decodedToken) {
+            // Extract the userId from the decoded token
+            const userId = yield decodedToken.userId;
+            var user = yield auth_model_1.authModel.findById(userId).select('-password');
+            return (0, resposnse_1.successResposnse)(res, { data: user });
+        }
+        else {
+            console.error('Failed to decode token.');
+        }
+    }
+    catch (error) {
+        next(error);
+    }
+});
 exports.getUserController = getUserController;
 // Update user
 const updateUserController = (req, res, next) => {

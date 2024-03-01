@@ -10,12 +10,12 @@ export const errorResposnse = (
     });
 };
   
-export  const successResposnse = (res:Response,{ statusCode = 200, message = "Success" ,payload={}}
+export  const successResposnse = (res:Response,{ statusCode = 200, message = "Success" ,data={}}
     ) => {
       return res.status(statusCode).json({
         success: true,
         message,
-        payload
+        data
       });
     };
   

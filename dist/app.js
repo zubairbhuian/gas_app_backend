@@ -17,6 +17,7 @@ const notification_routes_1 = __importDefault(require("./modules/notification/no
 const gas_cylinder_safety_routes_1 = __importDefault(require("./modules/gasCylinderSafety/gas_cylinder_safety_routes"));
 const gas_banner_routes_1 = __importDefault(require("./modules/gas_banner/gas_banner_routes"));
 const path_1 = __importDefault(require("path"));
+const my_product_routes_1 = __importDefault(require("./modules/myProduct/my_product_routes"));
 const app = (0, express_1.default)();
 // Serve static files from the 'public' directory
 const publicPath = path_1.default.join(__dirname, '../public');
@@ -43,6 +44,7 @@ app.use('/api/v1/privacy_policy', privacy_policy_routes_1.default);
 app.use('/api/v1/notification', notification_routes_1.default);
 app.use('/api/v1/gas_cylinder_safety', gas_cylinder_safety_routes_1.default);
 app.use('/api/v1/gas_banner', gas_banner_routes_1.default);
+app.use('/api/v1/my_product', my_product_routes_1.default);
 // // Define a static route to serve uploaded images
 // // app.use('/images', express.static(__dirname + '/public/uploads'));
 // app.use( express.static('public'));

@@ -120,7 +120,7 @@ export const deleteGasBannerController = async (req: Request, res: Response, nex
         console.log(error);
         res.status(500).json({ error: 'Internal server error' });
     }
-}//deleteAllGasBannerController
+}
 
 // ! delete all GasBanner
 export const deleteAllGasBannerController = async (req: Request, res: Response, next: NextFunction) => {
