@@ -14,6 +14,7 @@ import gasCylinderSafetyRoutes from "./modules/gasCylinderSafety/gas_cylinder_sa
 import gasBannerRoutes from "./modules/gas_banner/gas_banner_routes";
 import path from 'path';
 import MyProductRoutes from "./modules/myProduct/my_product_routes";
+import AdditionalServiceRoutes from "./modules/additionalService/additional_services_controller_routes";
 
 const app = express();
 // Serve static files from the 'public' directory
@@ -47,6 +48,7 @@ app.use('/api/v1/notification', notificationRoutes);
 app.use('/api/v1/gas_cylinder_safety', gasCylinderSafetyRoutes);
 app.use('/api/v1/gas_banner', gasBannerRoutes);
 app.use('/api/v1/my_product', MyProductRoutes);
+app.use('/api/v1/additional_service', AdditionalServiceRoutes);
 
 
 

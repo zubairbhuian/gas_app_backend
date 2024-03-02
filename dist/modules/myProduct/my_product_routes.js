@@ -28,11 +28,7 @@ const upload = (0, multer_1.default)({
 });
 const MyProductRoutes = express_1.default.Router();
 MyProductRoutes.get('/', my_product_controller_1.getMyProductController);
-MyProductRoutes.post('/', upload.fields([
-    { name: 'image1', maxCount: 1 },
-    { name: 'image2', maxCount: 1 },
-    { name: 'image3', maxCount: 1 }
-]), my_product_controller_1.createMyProductController);
+MyProductRoutes.post('/', my_product_controller_1.createMyProductController);
 MyProductRoutes.put('/', my_product_controller_1.updateMyProductController);
 MyProductRoutes.delete('/', my_product_controller_1.deleteMyProductController);
 exports.default = MyProductRoutes;

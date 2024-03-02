@@ -23,13 +23,13 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.MyProductMolel = void 0;
+exports.AdditionalService = void 0;
 const mongoose_1 = __importStar(require("mongoose"));
-const myproductSchema = new mongoose_1.Schema({
-    name: {
+const additionalServiceSchema = new mongoose_1.Schema({
+    title: {
         type: String,
         required: [true, 'name is missing'],
-        trim: true, // empty space remove
+        trim: true,
         maxlenght: [31, 'Title should be under 31'],
     },
     description: {
@@ -37,39 +37,11 @@ const myproductSchema = new mongoose_1.Schema({
         required: [true, 'Description is missing'],
         trim: true,
     },
-    weight: {
-        type: String,
-        required: [true, 'weight is missing'],
-        trim: true, // empty space remove
-    },
     price: {
         type: Number,
         required: [true, 'price is missing'],
-        trim: true, // empty space remove
+        trim: true,
     },
-    rating: {
-        type: Number,
-        required: [true, 'condition is missing'],
-        trim: true, // empty space remove
-    },
-    condition: {
-        type: String,
-        required: [true, 'condition is missing'],
-        trim: true, // empty space remove
-    },
-    img1: {
-        type: String,
-        default: "" // empty space remove
-    },
-    img2: {
-        type: String,
-        default: "" // empty space remove
-    },
-    img3: {
-        type: String,
-        default: "" // empty space remove
-    },
-}, { timestamps: true } // when this data create or update
-);
-exports.MyProductMolel = mongoose_1.default.model('myProduct', myproductSchema);
-//# sourceMappingURL=my_product_model.js.map
+}, { timestamps: true });
+exports.AdditionalService = mongoose_1.default.model('additionalService', additionalServiceSchema);
+//# sourceMappingURL=additional_service_model.js.map

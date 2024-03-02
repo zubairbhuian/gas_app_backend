@@ -12,14 +12,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteMyProductController = exports.updateMyProductController = exports.createMyProductController = exports.getMyProductController = void 0;
-const my_product_model_1 = require("./my_product_model");
+exports.deleteAdditionalServiceController = exports.updateAdditionalServiceController = exports.createAdditionalServiceController = exports.getAdditionalServiceController = void 0;
 const mongoose_1 = __importDefault(require("mongoose"));
-// ! get MyProductes
-const getMyProductController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+const additional_service_model_1 = require("./additional_service_model");
+// ! get AdditionalServicees
+const getAdditionalServiceController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         // Fetch all data from the DataModel collection
-        const allData = yield my_product_model_1.MyProductMolel.find();
+        const allData = yield additional_service_model_1.AdditionalService.find();
         // Respond with the fetched data
         res.status(200).json({ message: 'Sucessfuly Get the data', data: allData });
     }
@@ -29,26 +29,20 @@ const getMyProductController = (req, res, next) => __awaiter(void 0, void 0, voi
         res.status(500).json({ error: 'Internal server error' });
     }
 });
-exports.getMyProductController = getMyProductController;
-// ! create MyProduct
-const createMyProductController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+exports.getAdditionalServiceController = getAdditionalServiceController;
+// ! create AdditionalService
+const createAdditionalServiceController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         // Extract data from the request body
-        const { name, description, weight, price, rating, condition, img1, img2, img3 } = req.body;
-        if (!name || !description || !weight || !price || !rating || !condition || !img1 || !img2 || !img3) {
-            return res.status(400).json({ error: 'name, description ,weight,price,rating,condition,img1,img2 and img3 are required fields' });
+        const { title, description, price } = req.body;
+        if (!title || !description || !price) {
+            return res.status(400).json({ error: 'Title ,description and price are required fields' });
         }
         // Create a new document using the Mongoose model
-        const newData = new my_product_model_1.MyProductMolel({
-            name,
+        const newData = new additional_service_model_1.AdditionalService({
+            title,
             description,
-            weight,
-            price,
-            rating,
-            condition,
-            img1,
-            img2,
-            img3,
+            price
         });
         // Save the document to the database
         yield newData.save();
@@ -58,11 +52,11 @@ const createMyProductController = (req, res, next) => __awaiter(void 0, void 0, 
         next(e);
     }
 });
-exports.createMyProductController = createMyProductController;
-// ! update MyProduct
-const updateMyProductController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+exports.createAdditionalServiceController = createAdditionalServiceController;
+// ! update AdditionalService
+const updateAdditionalServiceController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { id, name, description, weight, price, rating, condition, img1, img2, img3 } = req.body;
+        const { id, title, description, price } = req.body;
         if (!id) {
             return res.status(400).json({ error: 'Id is required fields' });
         }
@@ -71,11 +65,11 @@ const updateMyProductController = (req, res, next) => __awaiter(void 0, void 0, 
             return res.status(400).json({ error: 'Invalid ID' });
         }
         // Check if any data to update is provided
-        if (!name && !description && !weight && !price && !rating && !condition && !img1 && !img2 && !img3) {
+        if (!title && !description && !price) {
             return res.status(400).json({ error: 'No data provided for update' });
         }
         // Find the document by ID and update it
-        const updatedData = yield my_product_model_1.MyProductMolel.findByIdAndUpdate(id, { name, description, weight, price, rating, condition, img1, img2, img3 }, { new: true });
+        const updatedData = yield additional_service_model_1.AdditionalService.findByIdAndUpdate(id, { title, description, price }, { new: true });
         // Check if the document exists
         if (!updatedData) {
             return res.status(404).json({ error: 'Data not found' });
@@ -88,9 +82,9 @@ const updateMyProductController = (req, res, next) => __awaiter(void 0, void 0, 
         res.status(500).json({ error: 'Internal server error' });
     }
 });
-exports.updateMyProductController = updateMyProductController;
-// ! delete MyProduct
-const deleteMyProductController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+exports.updateAdditionalServiceController = updateAdditionalServiceController;
+// ! delete AdditionalService
+const deleteAdditionalServiceController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         // Extract the ID from the request parameters
         const { id } = req.body;
@@ -102,7 +96,7 @@ const deleteMyProductController = (req, res, next) => __awaiter(void 0, void 0, 
             return res.status(400).json({ error: 'Invalid ID' });
         }
         // Find the document by ID and delete it
-        const deletedData = yield my_product_model_1.MyProductMolel.findByIdAndDelete(id);
+        const deletedData = yield additional_service_model_1.AdditionalService.findByIdAndDelete(id);
         // Check if the document exists
         if (!deletedData) {
             return res.status(404).json({ error: 'Data not found' });
@@ -115,5 +109,5 @@ const deleteMyProductController = (req, res, next) => __awaiter(void 0, void 0, 
         res.status(500).json({ error: 'Internal server error' });
     }
 });
-exports.deleteMyProductController = deleteMyProductController;
-//# sourceMappingURL=my_product_controller.js.map
+exports.deleteAdditionalServiceController = deleteAdditionalServiceController;
+//# sourceMappingURL=additional_services_controller.js.map

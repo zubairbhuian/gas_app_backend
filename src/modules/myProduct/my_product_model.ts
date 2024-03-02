@@ -1,9 +1,9 @@
 import mongoose, { Schema } from "mongoose";
 
 const myproductSchema=new Schema({
-    title:{
+    name:{
         type:String,
-        required:[true,'Title is missing'],
+        required:[true,'name is missing'],
         trim:true, // empty space remove
         maxlenght:[31, 'Title should be under 31'],
     },
@@ -11,8 +11,40 @@ const myproductSchema=new Schema({
         type:String,
         required:[true,'Description is missing'],
         trim:true,
-        maxlenght:[200, 'Title should be under 31'],
     },
+    weight:{
+        type:String,
+        required:[true,'weight is missing'],
+        trim:true, // empty space remove
+    },
+    price:{
+        type:Number,
+        required:[true,'price is missing'],
+        trim:true, // empty space remove
+    },
+    rating:{
+        type:Number,
+        required:[true,'condition is missing'],
+        trim:true, // empty space remove
+    },
+    condition:{
+        type:String,
+        required:[true,'condition is missing'],
+        trim:true, // empty space remove
+    },
+    img1:{
+        type:String,
+        default:"" // empty space remove
+    },
+    img2:{
+        type:String,
+        default:"" // empty space remove
+    },
+    img3:{
+        type:String,
+        default:"" // empty space remove
+    },
+
 },
 {timestamps :true}// when this data create or update
 );

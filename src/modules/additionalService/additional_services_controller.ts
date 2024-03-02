@@ -1,12 +1,12 @@
 import { Request, Response, NextFunction } from "express";
-import { MyProductMolel } from "./my_product_model";
 import mongoose from "mongoose";
+import { AdditionalService } from "./additional_service_model";
 
-// ! get MyProductes
-export const getMyProductController = async (req: Request, res: Response, next: NextFunction) => {
+// ! get AdditionalServicees
+export const getAdditionalServiceController = async (req: Request, res: Response, next: NextFunction) => {
     try {
         // Fetch all data from the DataModel collection
-        const allData = await MyProductMolel.find();
+        const allData = await AdditionalService.find();
         // Respond with the fetched data
         res.status(200).json({ message: 'Sucessfuly Get the data', data: allData });
     } catch (e) {
@@ -16,25 +16,19 @@ export const getMyProductController = async (req: Request, res: Response, next: 
     }
 }
 
-// ! create MyProduct
-export const createMyProductController = async (req: Request, res: Response, next: NextFunction) => {
+// ! create AdditionalService
+export const createAdditionalServiceController = async (req: Request, res: Response, next: NextFunction) => {
     try {
         // Extract data from the request body
-        const { name, description, weight, price, rating, condition, img1, img2, img3 } = req.body;
-        if (!name || !description || !weight || !price || !rating || !condition || !img1 || !img2 || !img3) {
-            return res.status(400).json({ error: 'name, description ,weight,price,rating,condition,img1,img2 and img3 are required fields' });
+        const { title, description ,price} = req.body;
+        if (!title || !description || !price) {
+            return res.status(400).json({ error: 'Title ,description and price are required fields' });
         }
         // Create a new document using the Mongoose model
-        const newData = new MyProductMolel({
-            name,
+        const newData = new AdditionalService({
+            title,
             description,
-            weight,
-            price,
-            rating,
-            condition,
-            img1,
-            img2,
-            img3,
+            price
         });
         // Save the document to the database
         await newData.save();
@@ -44,10 +38,10 @@ export const createMyProductController = async (req: Request, res: Response, nex
     }
 }
 
-// ! update MyProduct
-export const updateMyProductController = async (req: Request, res: Response, next: NextFunction) => {
+// ! update AdditionalService
+export const updateAdditionalServiceController = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { id, name, description, weight, price, rating, condition, img1, img2, img3 } = req.body;
+        const { id, title, description, price} = req.body;
         if (!id) {
             return res.status(400).json({ error: 'Id is required fields' });
         }
@@ -58,11 +52,11 @@ export const updateMyProductController = async (req: Request, res: Response, nex
 
 
         // Check if any data to update is provided
-        if (!name && !description && !weight && !price && !rating && !condition && !img1 && !img2 && !img3) {
+        if (!title && !description && !price) {
             return res.status(400).json({ error: 'No data provided for update' });
         }
         // Find the document by ID and update it
-        const updatedData = await MyProductMolel.findByIdAndUpdate(id, { name, description, weight, price, rating, condition, img1, img2, img3 }, { new: true });
+        const updatedData = await AdditionalService.findByIdAndUpdate(id, { title, description,price }, { new: true });
 
         // Check if the document exists
         if (!updatedData) {
@@ -79,8 +73,8 @@ export const updateMyProductController = async (req: Request, res: Response, nex
     }
 }
 
-// ! delete MyProduct
-export const deleteMyProductController = async (req: Request, res: Response, next: NextFunction) => {
+// ! delete AdditionalService
+export const deleteAdditionalServiceController = async (req: Request, res: Response, next: NextFunction) => {
     try {
         // Extract the ID from the request parameters
         const { id } = req.body;
@@ -93,7 +87,7 @@ export const deleteMyProductController = async (req: Request, res: Response, nex
         }
 
         // Find the document by ID and delete it
-        const deletedData = await MyProductMolel.findByIdAndDelete(id);
+        const deletedData = await AdditionalService.findByIdAndDelete(id);
 
         // Check if the document exists
         if (!deletedData) {

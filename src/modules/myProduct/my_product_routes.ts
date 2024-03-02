@@ -26,11 +26,7 @@ const upload = multer({
 const MyProductRoutes = express.Router();
 
 MyProductRoutes.get('/', getMyProductController);
-MyProductRoutes.post('/', upload.fields([
-    { name: 'image1', maxCount: 1 },
-    { name: 'image2', maxCount: 1 },
-    { name: 'image3', maxCount: 1 }
-]), createMyProductController);
+MyProductRoutes.post('/', createMyProductController);
 MyProductRoutes.put('/', updateMyProductController);
 MyProductRoutes.delete('/', deleteMyProductController);
 
