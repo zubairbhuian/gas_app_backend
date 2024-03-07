@@ -44,7 +44,7 @@ const authSchema = new Schema<IAuthModel>({
     },
     photoURL: {
         type: String,
-        default: ''
+        default: '/default/users/default_user.png'
     },
 }, { timestamps: true });
 

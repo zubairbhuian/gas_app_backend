@@ -141,6 +141,7 @@ const deleteAllGasBannerController = (req, res, next) => __awaiter(void 0, void 
     try {
         // Respond with a success message
         var deletedData = yield gas_banner_model_1.GasBannerMolel.deleteMany();
+        // delete all file
         const folderPath = 'public/uploads/banner';
         fs_extra_1.default.readdir(folderPath, (err, files) => {
             if (err) {

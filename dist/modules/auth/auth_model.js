@@ -70,7 +70,7 @@ const authSchema = new mongoose_1.Schema({
     },
     photoURL: {
         type: String,
-        default: ''
+        default: '/default/users/default_user.png'
     },
 }, { timestamps: true });
 // Add comparePassword method

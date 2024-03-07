@@ -16,7 +16,6 @@ export const getGasBannerController = async (req: Request, res: Response, next: 
         res.status(500).json({ error: 'Internal server error' });
     }
 }
-
 // ! create GasBanner
 export const createGasBannerController = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -127,13 +126,13 @@ export const deleteAllGasBannerController = async (req: Request, res: Response, 
     try {
         // Respond with a success message
         var deletedData = await GasBannerMolel.deleteMany();
+        // delete all file
         const folderPath = 'public/uploads/banner';
         fs.readdir(folderPath, (err, files) => {
             if (err) {
                 console.error(`Error reading directory ${folderPath}:`, err);
                 return;
             }
-
             // Iterate over the files and remove each one
             files.forEach((file) => {
                 const filePath = `${folderPath}/${file}`;
