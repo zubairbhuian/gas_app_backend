@@ -131,7 +131,7 @@ export const updateUserController = async (req: Request, res: Response, next: Ne
             const userId = await decodedToken.userId;
             console.log(userId);
 
-            const updatedData = await authModel.findByIdAndUpdate(userId, { name, email, phone, addreass }, { new: true });
+            const updatedData = await authModel.findByIdAndUpdate(userId, { name, email, phone, addreass }, { new: true }).select('-password');
             if (!updatedData) {
                 return res.status(404).json({ error: 'Data not found' });
             }
@@ -171,7 +171,7 @@ export const updateProfilPictureController = async (req: Request, res: Response,
                 }
             });
             /// Find the document by ID and update it
-            const updatedData = await authModel.findByIdAndUpdate(id, { photoURL: filePath }, { new: true });
+            const updatedData = await authModel.findByIdAndUpdate(id, { photoURL: filePath }, { new: true }).select('-password');
 
             // Check if the document exists
             if (!updatedData) {

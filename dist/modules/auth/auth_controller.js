@@ -148,7 +148,7 @@ const updateUserController = (req, res, next) => __awaiter(void 0, void 0, void 
             // Extract the userId from the decoded token
             const userId = yield decodedToken.userId;
             console.log(userId);
-            const updatedData = yield auth_model_1.authModel.findByIdAndUpdate(userId, { name, email, phone, addreass }, { new: true });
+            const updatedData = yield auth_model_1.authModel.findByIdAndUpdate(userId, { name, email, phone, addreass }, { new: true }).select('-password');
             if (!updatedData) {
                 return res.status(404).json({ error: 'Data not found' });
             }
@@ -188,7 +188,7 @@ const updateProfilPictureController = (req, res, next) => __awaiter(void 0, void
                 }
             });
             /// Find the document by ID and update it
-            const updatedData = yield auth_model_1.authModel.findByIdAndUpdate(id, { photoURL: filePath }, { new: true });
+            const updatedData = yield auth_model_1.authModel.findByIdAndUpdate(id, { photoURL: filePath }, { new: true }).select('-password');
             // Check if the document exists
             if (!updatedData) {
                 return res.status(404).json({ error: 'Data not found' });

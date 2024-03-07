@@ -52,7 +52,7 @@ app.use('/api/v1/additional_service', additional_services_controller_routes_1.de
 // app.use( express.static('public'));
 // client Error handeling
 app.use((req, res, next) => {
-    const error = new Error('Not Found');
+    const error = new Error('Route Not Found');
     res.status(404).json({
         success: false,
         message: error.message,

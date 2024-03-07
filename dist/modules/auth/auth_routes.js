@@ -10,7 +10,7 @@ const multer_1 = __importDefault(require("multer"));
 const path_1 = __importDefault(require("path"));
 // Define the destination and filename for uploaded files
 const storage = multer_1.default.diskStorage({
-    destination: 'public/uploads/gasCS',
+    destination: 'public/uploads/user',
     filename: function (req, file, cb) {
         // Ensure the file extension is .png or .jpg
         const allowedExtensions = ['.png', '.jpg'];
@@ -39,7 +39,7 @@ authRoutes.delete('/delete_all_user', verify_token_middleware_1.default, auth_co
 authRoutes.get('/get_user', verify_token_middleware_1.default, auth_controller_1.getUserController);
 authRoutes.get('/get_all_user', verify_token_middleware_1.default, auth_controller_1.getAllUserController);
 authRoutes.put('/update_user', verify_token_middleware_1.default, auth_controller_1.updateUserController);
-authRoutes.put('/update_profile_picture', verify_token_middleware_1.default, upload.single('image'), auth_controller_1.updateProfilPictureController);
+authRoutes.post('/update_profile_picture', verify_token_middleware_1.default, upload.single('image'), auth_controller_1.updateProfilPictureController);
 authRoutes.post('/forget_password', auth_controller_1.forgetPassController);
 authRoutes.patch('/change_password', verify_token_middleware_1.default, auth_controller_1.changePassController);
 exports.default = authRoutes;

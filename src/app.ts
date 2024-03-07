@@ -58,7 +58,7 @@ app.use('/api/v1/additional_service', AdditionalServiceRoutes);
 // app.use( express.static('public'));
 // client Error handeling
 app.use((req: Request, res: Response, next: NextFunction) => {
-    const error = new Error('Not Found');
+    const error = new Error('Route Not Found');
     res.status(404).json({
         success: false,
         message: error.message,

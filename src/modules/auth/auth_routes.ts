@@ -9,7 +9,7 @@ import path from 'path';
 
 // Define the destination and filename for uploaded files
 const storage = multer.diskStorage({
-    destination: 'public/uploads/gasCS',
+    destination: 'public/uploads/user',
     filename: function (req, file, cb) {
         // Ensure the file extension is .png or .jpg
         const allowedExtensions = ['.png', '.jpg'];
@@ -44,7 +44,7 @@ authRoutes.delete('/delete_all_user', verifyToken, deleteAllUserController);
 authRoutes.get('/get_user', verifyToken, getUserController);
 authRoutes.get('/get_all_user', verifyToken, getAllUserController);
 authRoutes.put('/update_user', verifyToken, updateUserController);
-authRoutes.put('/update_profile_picture', verifyToken,upload.single('image'), updateProfilPictureController);
+authRoutes.post('/update_profile_picture', verifyToken,upload.single('image'), updateProfilPictureController);
 authRoutes.post('/forget_password', forgetPassController);
 authRoutes.patch('/change_password', verifyToken, changePassController);
 
