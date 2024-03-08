@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteMyProductController = exports.updateMyProductController = exports.createMyProductController = exports.getMyProductController = void 0;
 const my_product_model_1 = require("./my_product_model");
 const mongoose_1 = __importDefault(require("mongoose"));
+const fs_extra_1 = __importDefault(require("fs-extra"));
 // ! get MyProductes
 const getMyProductController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -34,9 +35,11 @@ exports.getMyProductController = getMyProductController;
 const createMyProductController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         // Extract data from the request body
-        const { name, description, weight, price, rating, condition, img1, img2, img3 } = req.body;
-        if (!name || !description || !weight || !price || !rating || !condition || !img1 || !img2 || !img3) {
-            return res.status(400).json({ error: 'name, description ,weight,price,rating,condition,img1,img2 and img3 are required fields' });
+        const { name, description, weight, price, Refillprice, rating, color } = req.body;
+        const filename = req.file.filename;
+        const filePath = "/uploads/product/" + filename;
+        if (!name || !description || !weight || !price || !Refillprice || !rating || !color) {
+            return res.status(400).json({ error: 'name, description ,weight,color,price,rating,condition,img1,img2 and img3 are required fields' });
         }
         // Create a new document using the Mongoose model
         const newData = new my_product_model_1.MyProductMolel({
@@ -44,11 +47,10 @@ const createMyProductController = (req, res, next) => __awaiter(void 0, void 0, 
             description,
             weight,
             price,
+            Refillprice,
+            color,
             rating,
-            condition,
-            img1,
-            img2,
-            img3,
+            img1: filePath,
         });
         // Save the document to the database
         yield newData.save();
@@ -62,7 +64,7 @@ exports.createMyProductController = createMyProductController;
 // ! update MyProduct
 const updateMyProductController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { id, name, description, weight, price, rating, condition, img1, img2, img3 } = req.body;
+        const { id, name, description, weight, price, Refillprice, rating, color } = req.body;
         if (!id) {
             return res.status(400).json({ error: 'Id is required fields' });
         }
@@ -71,11 +73,11 @@ const updateMyProductController = (req, res, next) => __awaiter(void 0, void 0, 
             return res.status(400).json({ error: 'Invalid ID' });
         }
         // Check if any data to update is provided
-        if (!name && !description && !weight && !price && !rating && !condition && !img1 && !img2 && !img3) {
+        if (!name && !description && !weight && !price && !Refillprice && !rating && !color) {
             return res.status(400).json({ error: 'No data provided for update' });
         }
         // Find the document by ID and update it
-        const updatedData = yield my_product_model_1.MyProductMolel.findByIdAndUpdate(id, { name, description, weight, price, rating, condition, img1, img2, img3 }, { new: true });
+        const updatedData = yield my_product_model_1.MyProductMolel.findByIdAndUpdate(id, { name, description, weight, color, price, Refillprice, rating }, { new: true });
         // Check if the document exists
         if (!updatedData) {
             return res.status(404).json({ error: 'Data not found' });
@@ -101,6 +103,17 @@ const deleteMyProductController = (req, res, next) => __awaiter(void 0, void 0, 
         if (!mongoose_1.default.Types.ObjectId.isValid(id)) {
             return res.status(400).json({ error: 'Invalid ID' });
         }
+        var banner = yield my_product_model_1.MyProductMolel.findById(id);
+        const filePath = "public/" + banner.img1;
+        // Use fs-extra's unlink method to delete the file
+        fs_extra_1.default.unlink(filePath, (err) => {
+            if (err) {
+                console.error(`Error deleting file ${filePath}:`, err);
+            }
+            else {
+                console.log(`File ${filePath} deleted successfully.`);
+            }
+        });
         // Find the document by ID and delete it
         const deletedData = yield my_product_model_1.MyProductMolel.findByIdAndDelete(id);
         // Check if the document exists

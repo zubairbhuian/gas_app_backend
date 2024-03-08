@@ -3,30 +3,32 @@ import { createMyProductController, deleteMyProductController, getMyProductContr
 import multer from "multer";
 import path from 'path';
 
-const upload = multer({
-    storage: multer.diskStorage({
-        destination: function (req, file, cb) {
-            cb(null, 'uploads/product'); // Set the destination directory
-        },
-        filename: function (req, file, cb) {
-            // Generate a unique filename by adding a timestamp
-            cb(null, Date.now() + '-' + file.originalname);
-        }
-    }),
-    fileFilter: function (req, file, cb) {
-        // Accept only PNG and JPG images
-        if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
-            cb(null, true);
+
+// Define the destination and filename for uploaded files
+const storage = multer.diskStorage({
+    destination: 'public/uploads/product',
+    filename: function (req, file, cb) {
+        // Ensure the file extension is .png or .jpg
+        const allowedExtensions = ['.png', '.jpg'];
+        const ext = path.extname(file.originalname).toLowerCase();
+        if (allowedExtensions.includes(ext)) {
+            // Create a unique filename
+            const uniqueSuffix = Date.now() + '_' + Math.round(Math.random() * 1E9);
+            // Set filename to be unique + original extension
+            cb(null, file.fieldname + '_' + uniqueSuffix + ext);
         } else {
-            cb(new Error('Only PNG and JPG images are allowed'));
+            cb(new Error('Only .png and .jpg files are allowed!'), null);
         }
     }
 });
 
+
+const upload = multer({ storage: storage });
+
 const MyProductRoutes = express.Router();
 
 MyProductRoutes.get('/', getMyProductController);
-MyProductRoutes.post('/', createMyProductController);
+MyProductRoutes.post('/',upload.single('image'), createMyProductController);
 MyProductRoutes.put('/', updateMyProductController);
 MyProductRoutes.delete('/', deleteMyProductController);
 

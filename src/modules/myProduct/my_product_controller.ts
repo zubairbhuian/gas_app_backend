@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { MyProductMolel } from "./my_product_model";
 import mongoose from "mongoose";
+import fs from 'fs-extra';
 
 // ! get MyProductes
 export const getMyProductController = async (req: Request, res: Response, next: NextFunction) => {
@@ -20,9 +21,11 @@ export const getMyProductController = async (req: Request, res: Response, next: 
 export const createMyProductController = async (req: Request, res: Response, next: NextFunction) => {
     try {
         // Extract data from the request body
-        const { name, description, weight, price, rating, condition, img1, img2, img3 } = req.body;
-        if (!name || !description || !weight || !price || !rating || !condition || !img1 || !img2 || !img3) {
-            return res.status(400).json({ error: 'name, description ,weight,price,rating,condition,img1,img2 and img3 are required fields' });
+        const { name, description, weight, price,Refillprice, rating,  color } = req.body;
+        const filename: string = (req.file as Express.Multer.File).filename;
+        const filePath: String = "/uploads/product/" + filename;
+        if (!name || !description || !weight || !price || !Refillprice|| !rating  || !color) {
+            return res.status(400).json({ error: 'name, description ,weight,color,price,rating,condition,img1,img2 and img3 are required fields' });
         }
         // Create a new document using the Mongoose model
         const newData = new MyProductMolel({
@@ -30,11 +33,10 @@ export const createMyProductController = async (req: Request, res: Response, nex
             description,
             weight,
             price,
+            Refillprice,
+            color,
             rating,
-            condition,
-            img1,
-            img2,
-            img3,
+            img1: filePath,
         });
         // Save the document to the database
         await newData.save();
@@ -47,7 +49,7 @@ export const createMyProductController = async (req: Request, res: Response, nex
 // ! update MyProduct
 export const updateMyProductController = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { id, name, description, weight, price, rating, condition, img1, img2, img3 } = req.body;
+        const { id, name, description, weight, price,Refillprice, rating, color } = req.body;
         if (!id) {
             return res.status(400).json({ error: 'Id is required fields' });
         }
@@ -58,11 +60,11 @@ export const updateMyProductController = async (req: Request, res: Response, nex
 
 
         // Check if any data to update is provided
-        if (!name && !description && !weight && !price && !rating && !condition && !img1 && !img2 && !img3) {
+        if (!name && !description && !weight && !price && !Refillprice && !rating && !color) {
             return res.status(400).json({ error: 'No data provided for update' });
         }
         // Find the document by ID and update it
-        const updatedData = await MyProductMolel.findByIdAndUpdate(id, { name, description, weight, price, rating, condition, img1, img2, img3 }, { new: true });
+        const updatedData = await MyProductMolel.findByIdAndUpdate(id, { name, description, weight, color, price,Refillprice, rating }, { new: true });
 
         // Check if the document exists
         if (!updatedData) {
@@ -91,7 +93,16 @@ export const deleteMyProductController = async (req: Request, res: Response, nex
         if (!mongoose.Types.ObjectId.isValid(id)) {
             return res.status(400).json({ error: 'Invalid ID' });
         }
-
+        var banner = await MyProductMolel.findById(id);
+        const filePath = "public/" + banner.img1;
+        // Use fs-extra's unlink method to delete the file
+        fs.unlink(filePath, (err) => {
+            if (err) {
+                console.error(`Error deleting file ${filePath}:`, err);
+            } else {
+                console.log(`File ${filePath} deleted successfully.`);
+            }
+        });
         // Find the document by ID and delete it
         const deletedData = await MyProductMolel.findByIdAndDelete(id);
 

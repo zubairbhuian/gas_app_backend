@@ -17,18 +17,23 @@ const myproductSchema=new Schema({
         required:[true,'weight is missing'],
         trim:true, // empty space remove
     },
+    color:{
+        type:String,
+        required:[true,'color is missing'],
+        trim:true, // empty space remove
+    },
     price:{
+        type:Number,
+        required:[true,'price is missing'],
+        trim:true, // empty space remove
+    },
+        Refillprice:{
         type:Number,
         required:[true,'price is missing'],
         trim:true, // empty space remove
     },
     rating:{
         type:Number,
-        required:[true,'condition is missing'],
-        trim:true, // empty space remove
-    },
-    condition:{
-        type:String,
         required:[true,'condition is missing'],
         trim:true, // empty space remove
     },
